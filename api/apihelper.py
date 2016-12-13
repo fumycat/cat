@@ -39,3 +39,15 @@ def check_fields(which):
         return wrapper
 
     return check_fields_dec
+
+
+def result_parser(response, exception):
+    if 'error' in response:
+        raise exception('TODO')  # TODO
+    elif 'response' in response:
+        if len(response['response']) == 1:
+            return response['response'][0]
+        elif len(response['response']) > 1:
+            return response['response']
+        else:
+            raise exception('TODO')  # TODO
