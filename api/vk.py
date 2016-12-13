@@ -11,6 +11,8 @@ class UsersGetException(Exception):
 
 @check_fields('users_get')
 def users_get(user_ids=1, fields=None, name_case='nom'):
+    if isinstance(user_ids, list):
+        user_ids = ','.join([str(f) for f in user_ids])
     parameters = {'user_ids': user_ids,
                   'fields': fields,
                   'name_case': name_case,
