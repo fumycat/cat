@@ -47,5 +47,11 @@ def wall_get(target=0, count=None, offset=None, filter=None, fields=None):
     return result_parser(response, WallGetException)
 
 
-def likes_add():
-    return
+def likes_add(owner_id=None, item_id=0, type='post', access_key=None):
+    parameters = {'access_token': os.environ['VK_TOKEN'], 'v': os.environ['API_VERSION'],
+                  'owner_id': owner_id, 'item_id': item_id, 'type': type, 'access_key': access_key}
+    request = requests.get(API + 'likes.add', params=parameters)
+    if 'response' in request.json():
+        return True
+    else:
+        return request.json()['error']
