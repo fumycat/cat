@@ -2,36 +2,9 @@ import os
 import requests
 from api.apihelper import check_fields
 from api.apihelper import result_parser
+from api.exceptions import *
 
 API = 'https://api.vk.com/method/'
-
-
-class UsersGetException(Exception):
-    pass
-
-
-class LikesAddException(Exception):
-    pass
-
-
-class MessagesSendException(Exception):
-    pass
-
-
-class WallGetException(Exception):
-    pass
-
-
-class MessagesGetDialogsException(Exception):
-    pass
-
-
-class MessagesGetHistoryException(Exception):
-    pass
-
-
-class FriendsAddException(Exception):
-    pass
 
 
 @check_fields('users_get')
@@ -57,7 +30,6 @@ def wall_get(target=0, count=None, offset=None, filter=None, fields=None):
         parameters['owner_id'] = target
 
     request = requests.get(API + 'wall.get', params=parameters)
-    print(request.url)
     return result_parser(request.json(), WallGetException)
 
 
@@ -104,4 +76,14 @@ def friends_add(user_id=None, text=None, follow=None):
     parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
                       user_id=user_id, text=text, follow=follow)
     request = requests.get(API + 'friends.add', params=parameters)
-    return result_parser(request.json(), FriendsAddException)
+    if 'response' in request.json():
+        return True
+    else:
+        return result_parser(request.json(), FriendsAddException)
+
+
+def wall_repost(object=None, message=None):
+    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+                      object=object, message=message)
+    request = requests.get(API + 'wall.repost', params=parameters)
+    return result_parser(request.json(), WallRepostException)
