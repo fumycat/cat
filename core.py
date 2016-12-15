@@ -1,22 +1,19 @@
 from parse import parse
-from api.vk import users_get
-from api.vk import wall_get
-from api.vk import likes_add
-from api.vk import messages_send
-from api.vk import messages_get_dialogs
-from api.vk import messages_get_history
-from api.vk import friends_add
-from api.vk import wall_repost
+from api.exceptions import *
+import api.vk as vk
 
 
 def main():
-    #  print(users_get(1, ['online', 'sex']))
-    print(wall_get('catcontrolcenter', 1))
-    #  print(likes_add(-135179098, 2))
-    #  print(messages_send(domain='fumycat', message='Test'))
-    #  print(messages_get_history(peer_id=227957341, count=3))
-    #  print(friends_add(user_id=374781505))
-    print(wall_repost('wall-135179098_2'))
+    #  print(vk.users_get(1, ['online', 'sex']))
+    #  print(vk.wall_get('catcontrolcenter', 1))
+    #  print(vk.likes_add(-135179098, 2))
+    try:
+        print(vk.messages_send(user_id=1, message='Test'))
+    except VkException as e:
+        print(str(e))
+    #  print(vk.messages_get_history(peer_id=227957341, count=3))
+    #  print(vk.friends_add(user_id=374781505))
+    #  print(vk.wall_repost('wall-135179098_2'))
     return
 
 main()

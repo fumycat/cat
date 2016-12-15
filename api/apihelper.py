@@ -40,11 +40,11 @@ def check_fields(which):
 
 def result_parser(response, exception):
     if 'error' in response:
-        raise exception('TODO' + str(response))  # TODO
+        raise exception(str(response))  # TODO
     elif 'response' in response:
         if len(response['response']) == 1:
             return response['response'][0]
         elif len(response['response']) > 1:
             return response['response']
         else:
-            raise exception('TODO' + str(response))  # TODO
+            raise exception(str(response))  # TODO

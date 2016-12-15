@@ -1,30 +1,34 @@
-class UsersGetException(Exception):
+class VkException(Exception):
     pass
 
 
-class LikesAddException(Exception):
+class UsersGetException(VkException):
     pass
 
 
-class MessagesSendException(Exception):
+class LikesAddException(VkException):
     pass
 
 
-class WallGetException(Exception):
+class MessagesSendException(VkException):
     pass
 
 
-class MessagesGetDialogsException(Exception):
+class WallGetException(VkException):
     pass
 
 
-class MessagesGetHistoryException(Exception):
+class MessagesGetDialogsException(VkException):
     pass
 
 
-class FriendsAddException(Exception):
+class MessagesGetHistoryException(VkException):
     pass
 
 
-class WallRepostException(Exception):
+class FriendsAddException(VkException):
+    pass
+
+
+class WallRepostException(VkException):
     pass
