@@ -10,6 +10,14 @@ class UsersGetException(Exception):
     pass
 
 
+class LikesAddException(Exception):
+    pass
+
+
+class MessagesSendException(Exception):
+    pass
+
+
 class WallGetException(Exception):
     pass
 
@@ -50,7 +58,7 @@ def likes_add(owner_id=None, item_id=0, type='post', access_key=None):
     if 'response' in request.json():
         return True
     else:
-        return request.json()['error']
+        return result_parser(request.json(), LikesAddException)
 
 
 def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None,
@@ -62,4 +70,4 @@ def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None,
     if 'response' in request.json():
         return True
     else:
-        return request.json()['error']
+        return result_parser(request.json(), MessagesSendException)
