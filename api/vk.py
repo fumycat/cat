@@ -30,6 +30,10 @@ class MessagesGetHistoryException(Exception):
     pass
 
 
+class FriendsAddException(Exception):
+    pass
+
+
 @check_fields('users_get')
 def users_get(user_ids=1, fields=None, name_case='nom'):
     if isinstance(user_ids, list):
@@ -94,3 +98,10 @@ def messages_get_history(count=None, offset=None, user_id=None, peer_id=None, st
                       user_id=user_id, peer_id=peer_id, rev=rev)
     request = requests.get(API + 'messages.getHistory', params=parameters)
     return result_parser(request.json(), MessagesGetHistoryException)
+
+
+def friends_add(user_id=None, text=None, follow=None):
+    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+                      user_id=user_id, text=text, follow=follow)
+    request = requests.get(API + 'friends.add', params=parameters)
+    return result_parser(request.json(), FriendsAddException)
