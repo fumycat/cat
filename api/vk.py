@@ -22,6 +22,14 @@ class WallGetException(Exception):
     pass
 
 
+class MessagesGetDialogsException(Exception):
+    pass
+
+
+class MessagesGetHistoryException(Exception):
+    pass
+
+
 @check_fields('users_get')
 def users_get(user_ids=1, fields=None, name_case='nom'):
     if isinstance(user_ids, list):
@@ -31,8 +39,7 @@ def users_get(user_ids=1, fields=None, name_case='nom'):
     parameters = dict(user_ids=user_ids, fields=fields, name_case=name_case, access_token=os.environ['VK_TOKEN'],
                       v=os.environ['API_VERSION'])
     request = requests.get(API + 'users.get', params=parameters)
-    response = request.json()
-    return result_parser(response, UsersGetException)
+    return result_parser(request.json(), UsersGetException)
 
 
 def wall_get(target=0, count=None, offset=None, filter=None, fields=None):
@@ -47,8 +54,7 @@ def wall_get(target=0, count=None, offset=None, filter=None, fields=None):
 
     request = requests.get(API + 'wall.get', params=parameters)
     print(request.url)
-    response = request.json()
-    return result_parser(response, WallGetException)
+    return result_parser(request.json(), WallGetException)
 
 
 def likes_add(owner_id=None, item_id=0, type='post', access_key=None):
@@ -71,3 +77,20 @@ def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None,
         return True
     else:
         return result_parser(request.json(), MessagesSendException)
+
+
+def messages_get_dialogs(count=None, offset=None, start_message_id=None, preview_length=None,
+                         unread=None, important=None, unanswered=None):
+    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+                      count=count, offset=offset, start_message_id=start_message_id,
+                      preview_length=preview_length, unread=unread, important=important, unanswered=unanswered)
+    request = requests.get(API + 'messages.getDialogs', params=parameters)
+    return result_parser(request.json(), MessagesGetDialogsException)
+
+
+def messages_get_history(count=None, offset=None, user_id=None, peer_id=None, start_message_id=None, rev=None):
+    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+                      count=count, offset=offset, start_message_id=start_message_id,
+                      user_id=user_id, peer_id=peer_id, rev=rev)
+    request = requests.get(API + 'messages.getHistory', params=parameters)
+    return result_parser(request.json(), MessagesGetHistoryException)
