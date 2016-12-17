@@ -26,12 +26,12 @@ def get_all_messages_from_dialog(user_id):
     i = 0
     while True:
         response = vk.messages_get_history(user_id=user_id, count=10, offset=i * 10)
-        print(response)  # DEL
+        # print(response)
         if not response['items']:
             break
         for item in response['items']:
             current_user_messages.append(item)
-        print(str(i * 10) + ' of ' + str(response['count']) + ' messages')
+        print(str(i * 10) + ' of ' + str(response['count']) + ' messages (vk.com/id' + user_id + ')')
         i += 1
     with open('output/messages/' + str(user_id) + '.json', 'w') as f:
         json.dump(current_user_messages, f)
