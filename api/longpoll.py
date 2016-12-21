@@ -18,6 +18,8 @@ class LongPoll(object):
             raise LongPollException('getLongPollServer error')
 
     def get(self):
+        """Docs"""
+        # TODO
         r = requests.get('https://%s?act=a_check&key=%s&ts=%s&wait=25&mode=2&version=1' % (self.s, self.k, self.t))
         response = r.json()
         if 'ts' in response:
