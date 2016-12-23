@@ -95,3 +95,14 @@ def wall_repost(object=None, message=None):
                       object=object, message=message)
     request = requests.get(API + 'wall.repost', params=parameters)
     return result_parser(request.json(), WallRepostException)
+
+
+def messages_get_by_id(message_ids=None):
+    """Returns list of messages"""
+    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'], message_ids=message_ids)
+    request = requests.get(API + 'messages.getById', params=parameters)
+    response = request.json()
+    if 'response' in response:
+        return response['response']['items']
+    else:
+        raise MessagesGetByIdException

@@ -32,3 +32,7 @@ class FriendsAddException(VkException):
 
 class WallRepostException(VkException):
     pass
+
+
+class MessagesGetByIdException(VkException):
+    pass
