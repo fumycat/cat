@@ -89,4 +89,7 @@ ENV/
 .ropeproject
 .idea/
 output/
+output_m/
+g_dialogs.py
+g_history.py
 database.db

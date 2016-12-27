@@ -7,7 +7,7 @@ from api.exceptions import *
 API = 'https://api.vk.com/method/'
 
 
-@check_fields('users_get')
+# @check_fields('users_get')
 def users_get(user_ids=1, fields=None, name_case='nom'):
     """Usage example: users_get(1, ['online', 'timezone'])"""
     if isinstance(user_ids, list):
@@ -74,7 +74,7 @@ def messages_get_history(count=None, offset=None, user_id=None, peer_id=None, st
     parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
                       count=count, offset=offset, start_message_id=start_message_id,
                       user_id=user_id, peer_id=peer_id, rev=rev)
-    request = requests.get(API + 'messages.getHistory', params=parameters)
+    request = requests.get(API + 'messages.getHistory', params=parameters, timeout=10.0)
     return result_parser(request.json(), MessagesGetHistoryException)
 
 
@@ -106,3 +106,25 @@ def messages_get_by_id(message_ids=None):
         return response['response']['items']
     else:
         raise MessagesGetByIdException
+
+
+# # TODO
+# def photos_get_by_id(photos=None):
+#     """Doc"""
+#     parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'], photos=photos)
+#     request = requests.get(API + 'photos.getById', params=parameters)
+#     response = request.json()
+#     if 'response' in response:
+#         return response['response']
+#
+#
+# # TODO
+# def docs_get_by_id(docs=None):
+#     """Doc"""
+#     parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'], docs=docs)
+#     request = requests.get(API + 'docs.getById', params=parameters)
+#     response = request.json()
+#     if 'response' in response:
+#         return response['response']
+#     else:
+#         return response
