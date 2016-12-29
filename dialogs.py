@@ -1,4 +1,5 @@
 import api.vk as vk
+import sys
 
 
 def last_dialogs(count):
@@ -14,5 +15,5 @@ def last_dialogs(count):
     return
 
 
-last_dialogs(1)
+last_dialogs(int(sys.argv[1]))
 
