@@ -4,7 +4,7 @@ import sys
 
 
 def history(count=20, peer_id=1):
-    some_history_dict = vk.messages_get_history(count, peer_id)
+    some_history_dict = vk.messages_get_history(count=count, peer_id=peer_id)
 
     for message in some_history_dict['items']:
         when = datetime.datetime.fromtimestamp(int(message['date'])).strftime('%Y-%m-%d %H:%M:%S')
