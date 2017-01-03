@@ -1,19 +1,35 @@
 import api.vk as vk
-import sys
 
 
-def last_dialogs(count):
-    for i in range(count):
-        response = vk.messages_get_dialogs(10, i*10)
-        if not response['items']:
-            break
-        for item in response['items']:
-            if 'chat_id' in item['message']:  # ignore chats
-                continue
-            s = vk.users_get(item['message']['user_id'])
-            print(s['first_name'], s['last_name'], s['id'])
-    return
+def dialogs(count, offset):
+    re = []
+    response = vk.messages_get_dialogs(count, offset)
+    if not response['items']:
+        return None
+    for item in response['items']:
+        if 'chat_id' in item['message']:  # ignore chats
+            re.append(item['message']['title'] + ' ' + str(int(item['message']['chat_id']) + 2000000000))
+        s = vk.users_get(item['message']['user_id'])
+        re.append(f"{s['first_name']} {s['last_name']} {s['id']}")
+    return re
 
 
-last_dialogs(int(sys.argv[1]))
+def last_dialogs(count=30):
+    re = []
+    x = count // 200
+    y = count % 200
+    i = 0
+    while x > 0:
+        res = dialogs(x, x * i)
+        for i in res:
+            if i is not None:
+                re.append(i)
+        x -= 1
+        i += 1
+    res = dialogs(y, x * i)
+    for i in res:
+        if i is not None:
+            re.append(i)
+    return re
+
 

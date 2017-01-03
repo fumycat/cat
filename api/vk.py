@@ -8,23 +8,23 @@ API = 'https://api.vk.com/method/'
 
 
 # @check_fields('users_get')
-def users_get(user_ids=1, fields=None, name_case='nom'):
+def users_get(user_ids=1, fields=None, name_case='nom', access_token=os.environ['VK_TOKEN']):
     """Usage example: users_get(1, ['online', 'timezone'])"""
     if isinstance(user_ids, list):
         user_ids = ','.join([str(f) for f in user_ids])
     if isinstance(fields, list):
         fields = ','.join([str(f) for f in fields])
-    parameters = dict(user_ids=user_ids, fields=fields, name_case=name_case, access_token=os.environ['VK_TOKEN'],
+    parameters = dict(user_ids=user_ids, fields=fields, name_case=name_case, access_token=access_token,
                       v=os.environ['API_VERSION'])
     request = requests.get(API + 'users.get', params=parameters)
     return result_parser(request.json(), UsersGetException)
 
 
-def wall_get(target=0, count=None, offset=None, filter=None, fields=None):
+def wall_get(target=0, count=None, offset=None, filter=None, fields=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: wall_get('catcontrolcenter', 10)"""
     if isinstance(fields, list):
         fields = ','.join([str(f) for f in fields])
-    parameters = dict(fields=fields, offset=offset, count=count, filter=filter, access_token=os.environ['VK_TOKEN'],
+    parameters = dict(fields=fields, offset=offset, count=count, filter=filter, access_token=access_token,
                       v=os.environ['API_VERSION'], extended=0 if not fields else 1)
     if isinstance(target, str):
         parameters['domain'] = target
@@ -35,9 +35,9 @@ def wall_get(target=0, count=None, offset=None, filter=None, fields=None):
     return result_parser(request.json(), WallGetException)
 
 
-def likes_add(owner_id=None, item_id=0, type='post', access_key=None):
+def likes_add(owner_id=None, item_id=0, type='post', access_key=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: likes_add(-135179098, 2)"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'], owner_id=owner_id,
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], owner_id=owner_id,
                       item_id=item_id, type=type, access_key=access_key)
     request = requests.get(API + 'likes.add', params=parameters)
     if 'response' in request.json():
@@ -46,10 +46,10 @@ def likes_add(owner_id=None, item_id=0, type='post', access_key=None):
         return result_parser(request.json(), LikesAddException)
 
 
-def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None,
+def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None, access_token=os.environ['VK_TOKEN'],
                   message=None, attachment=None, forward_messages=None, sticker_id=None):
     """Use try/catch"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'], user_id=user_id,
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], user_id=user_id,
                       peer_id=peer_id, domain=domain, chat_id=chat_id, message=message, attachment=attachment,
                       forward_messages=forward_messages, sticker_id=sticker_id)
     request = requests.get(API + 'messages.send', params=parameters)
@@ -60,27 +60,27 @@ def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None,
 
 
 def messages_get_dialogs(count=None, offset=None, start_message_id=None, preview_length=None,
-                         unread=None, important=None, unanswered=None):
+                         unread=None, important=None, unanswered=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: messages_get_dialogs(count=20)"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'],
                       count=count, offset=offset, start_message_id=start_message_id,
                       preview_length=preview_length, unread=unread, important=important, unanswered=unanswered)
     request = requests.get(API + 'messages.getDialogs', params=parameters)
     return result_parser(request.json(), MessagesGetDialogsException)
 
 
-def messages_get_history(count=None, offset=None, user_id=None, peer_id=None, start_message_id=None, rev=None):
+def messages_get_history(count=None, offset=None, user_id=None, peer_id=None, start_message_id=None, rev=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: messages_get_history(peer_id=1, count=10)"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'],
                       count=count, offset=offset, start_message_id=start_message_id,
                       user_id=user_id, peer_id=peer_id, rev=rev)
     request = requests.get(API + 'messages.getHistory', params=parameters, timeout=10.0)
     return result_parser(request.json(), MessagesGetHistoryException)
 
 
-def friends_add(user_id=None, text=None, follow=None):
+def friends_add(user_id=None, text=None, follow=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: friends_add(user_id=1)"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'],
                       user_id=user_id, text=text, follow=follow)
     request = requests.get(API + 'friends.add', params=parameters)
     if 'response' in request.json():
@@ -89,17 +89,17 @@ def friends_add(user_id=None, text=None, follow=None):
         return result_parser(request.json(), FriendsAddException)
 
 
-def wall_repost(object=None, message=None):
+def wall_repost(object=None, message=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: wall_repost('wall-135179098_2', 'Nice meme')"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'],
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'],
                       object=object, message=message)
     request = requests.get(API + 'wall.repost', params=parameters)
     return result_parser(request.json(), WallRepostException)
 
 
-def messages_get_by_id(message_ids=None):
+def messages_get_by_id(message_ids=None, access_token=os.environ['VK_TOKEN']):
     """Returns list of messages"""
-    parameters = dict(access_token=os.environ['VK_TOKEN'], v=os.environ['API_VERSION'], message_ids=message_ids)
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], message_ids=message_ids)
     request = requests.get(API + 'messages.getById', params=parameters)
     response = request.json()
     if 'response' in response:

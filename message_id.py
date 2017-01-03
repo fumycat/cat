@@ -1,6 +1,6 @@
 import api.vk as vk
-import sys
 
 
-print(vk.messages_get_by_id(sys.argv[1]))
+def msg(message_id):
+    return vk.messages_get_by_id(message_id)
 
