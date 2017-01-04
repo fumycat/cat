@@ -1,4 +1,5 @@
 import api.vk as vk
+from api.exceptions import *
 
 
 def dialogs(count, offset):
@@ -9,7 +10,11 @@ def dialogs(count, offset):
     for item in response['items']:
         if 'chat_id' in item['message']:  # ignore chats
             re.append(item['message']['title'] + ' ' + str(int(item['message']['chat_id']) + 2000000000))
-        s = vk.users_get(item['message']['user_id'])
+            continue
+        try:
+            s = vk.users_get(item['message']['user_id'])
+        except UsersGetException:
+            s = {'id': item['message']['user_id'], 'first_name': '', 'last_name': '-1'}
         re.append(f"{s['first_name']} {s['last_name']} {s['id']}")
     return re
 

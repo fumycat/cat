@@ -1,5 +1,6 @@
 import subprocess
 import threading
+from pprint import pprint
 
 import requests
 
@@ -13,6 +14,7 @@ history <peer_id> <count> - get message history
 msg <message_id> - get attachments from message
 exit - exit"""
 
+cache_dialogs = {}
 
 def get_photo(keys, attachment, attachment_type):
     best_num = max(int(item.split('_')[1]) for item in keys if item.startswith('photo_'))
@@ -37,8 +39,11 @@ while True:
         except (IndexError, ValueError):
             pass
         finally:
+            counter = 0
             for i in dialogs.last_dialogs(count):
-                print(i)
+                print(str(counter), i)
+                cache_dialogs[counter] = int(i.split(' ')[-1])
+                counter += 1
 
     elif query.startswith('history'):
         count = 50
@@ -48,6 +53,8 @@ while True:
         except (IndexError, ValueError):
             pass
         finally:
+            if peer < 10000:
+                peer = cache_dialogs[peer]
             for i in history.history(count=count, peer_id=peer):
                 print(i)
 
@@ -73,10 +80,10 @@ while True:
                     threading.Thread(target=get_photo, args=[keys_list, i, 'photo']).start()
                     print('Photo from message ' + str(msg_id))
                 else:
-                    print(i)  # TODO
+                    pprint(resp)  # TODO
         except Exception as e:
             print(e)
+            pprint(resp)
 
     elif query == 'exit':
         exit()
-
