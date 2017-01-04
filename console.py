@@ -1,3 +1,4 @@
+import os
 import subprocess
 import threading
 from pprint import pprint
@@ -8,7 +9,6 @@ import dialogs
 import history
 import message_id
 
-
 text_help = """dialogs <count> - get dialog list
 history <peer_id> <count> - get message history
 msg <message_id> - get attachments from message
@@ -16,6 +16,7 @@ help - help
 exit - exit"""
 
 cache_dialogs = {}
+op = 'gnome-open'  # command for opening photos (only for unix)
 
 
 def get_photo(keys, attachment, attachment_type):
@@ -25,9 +26,12 @@ def get_photo(keys, attachment, attachment_type):
     file_name = str(msg_id) + ' ' + pic_url.split('/')[-1]
     with open(file_name, 'wb') as pic:
         pic.write(photo.content)
-    command = ['gnome-open', file_name]
-    process = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    process.wait()
+    if os.name == 'posix':
+        command = [op, file_name]
+        process = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        process.wait()
+    else:
+        subprocess.call(file_name, shell=True)
 
 print(text_help)
 
@@ -85,8 +89,7 @@ while True:
                     print('Photo from message ' + str(msg_id))
                 else:
                     pprint(resp)  # TODO
-        except Exception as e:
-            print(e)
+        except Exception:
             pprint(resp)
 
     elif query == 'exit':
