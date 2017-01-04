@@ -6,22 +6,9 @@ export API_VERSION='5.60'
 export VK_TOKEN='ТОКЕН'
 ```
 
+После чего можно запускать:
 
-#### history.py
-Возвращает историю сообщений. Пример:
-
-`python3 history.py 30 1` (30 - количество, 1 - id собеседника)
-
-
-#### dialogs.py
-Возвращает список диалогов, при этом пропуская беседы. Пример:
-
-`python3 dialogs.py 3` (3*10 = 30 - сколько диалогов вернуть)
-
-#### messages.py (не работает, лень фиксить)
-Скачивает список всех диалогов в `output/pure.json` и все сообщения в папку `output/messages/{user_id}.json`
-
-`python3 messages.py`
-
-Необходимо создать папки output и messages, иначе будет ошибка
+```
+python3.6 console.py
+```
 

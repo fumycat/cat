@@ -12,9 +12,11 @@ import message_id
 text_help = """dialogs <count> - get dialog list
 history <peer_id> <count> - get message history
 msg <message_id> - get attachments from message
+help - help
 exit - exit"""
 
 cache_dialogs = {}
+
 
 def get_photo(keys, attachment, attachment_type):
     best_num = max(int(item.split('_')[1]) for item in keys if item.startswith('photo_'))
@@ -26,6 +28,8 @@ def get_photo(keys, attachment, attachment_type):
     command = ['gnome-open', file_name]
     process = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
+
+print(text_help)
 
 while True:
     query = input('> ')

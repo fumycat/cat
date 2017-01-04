@@ -4,7 +4,9 @@ import datetime
 cache = {}
 
 
-def parse_message(msg, fwd=False):
+def parse_message(msg, fwd=False, deep=0):
+    if not fwd:
+        deep = 0
     parsed_fwd_messages = []
     when = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%m-%d %H:%M:%S')
     text = msg['body']
@@ -15,12 +17,14 @@ def parse_message(msg, fwd=False):
         text = '[A] ' + text
     if 'fwd_messages' in msg:
         for fwd_message in msg['fwd_messages']:
-            parsed_fwd_messages.insert(0, parse_message(fwd_message, fwd=True))
-
-    parsed_message = f'{message_id} {when} {x} {text}'
+            deep += 1
+            parsed_fwd_messages.insert(0, '  ' + parse_message(fwd_message, True, deep))
+            deep -= 1
+    parsed_message = '   ' * deep + f'{message_id} {when} {x} {text}'
     if parsed_fwd_messages:
         for i in parsed_fwd_messages:
-            parsed_message += '\n   ' + i
+            parsed_message += '\n' + i
+    deep += 1
     return parsed_message
 
 
