@@ -71,8 +71,8 @@ def main():
             finally:
                 if peer < 10000:
                     peer = cache_dialogs[peer]
-                for i in history.history(count=count, peer_id=peer):
-                    print(i)
+                for i in history.history_generator(count=count, peer_id=peer, offset=0):
+                    print(i['message_id'], i['date'], i['from'], i['text'])
 
         elif query.startswith('msg'):
             resp = None
