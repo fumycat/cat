@@ -93,5 +93,4 @@ output_m/
 g_dialogs.py
 g_history.py
 database.db
-*.jpg
-*.png
+.cache/

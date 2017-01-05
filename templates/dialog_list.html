@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>Dialogs</title>
+  <link rel="stylesheet" type="text/css" href="/static/dialogs.css"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ </head>
+ <body>
+ <ul>
+  {% for i in items %}
+  <a href="{{i.chat_id}}">
+    <div class="item">
+      <div class="photo-circle">
+       {% if i.no_photo %}
+        <img class="chat-photo" alt="" src="/static/camera_50.png">
+       {% else %}
+        <img class="chat-photo" alt="" src="{{i.pic_url}}">
+       {% endif %}
+      </div>
+      
+      <div class="texts">
+        <h1 class="title">{{ i.title }}</h1>
+        <h1 class="text">{{ i.body }}</h1>
+      </div>
+      <h1 class="time">{{ i.last_date }}</h1>
+    </div>
+  </a>
+  {% endfor %}
+</ul>
+</body>
+</html>

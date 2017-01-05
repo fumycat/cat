@@ -1,21 +1,51 @@
+import arrow
+
 import api.vk as vk
 from api.exceptions import *
+
+
+def get_user_info(user_id):
+    try:
+        return vk.users_get(user_id, 'photo_50')
+    except UsersGetException:
+        return {'id': user_id, 'first_name': 'Unknown group', 'last_name': ''}
 
 
 def dialogs(count, offset):
     re = []
     response = vk.messages_get_dialogs(count, offset)
-    if not response['items']:
-        return None
+    #
+    # from pprint import pprint
+    # pprint(response)
+    #
     for item in response['items']:
-        if 'chat_id' in item['message']:  # ignore chats
-            re.append(item['message']['title'] + ' ' + str(int(item['message']['chat_id']) + 2000000000))
-            continue
-        try:
-            s = vk.users_get(item['message']['user_id'])
-        except UsersGetException:
-            s = {'id': item['message']['user_id'], 'first_name': '', 'last_name': '-1'}
-        re.append(f"{s['first_name']} {s['last_name']} {s['id']}")
+        last_date = arrow.get(int(item['message']['date'])).humanize(locale='ru_ru')
+        body = item['message']['body']
+        if body == '':
+            body = 'Костыль'
+        if 'chat_id' in item['message']:
+            title = item['message']['title']
+            chat_id = str(int(item['message']['chat_id']) + 2000000000)
+            pic_url = vk.get_chat_pic(int(chat_id) - 2000000000, 50)
+            no_photo = True if pic_url == 'http://vk.com/images/camera_50.png' else False
+            re.append({'title': title,
+                       'chat_id': chat_id,
+                       'last_date': last_date,
+                       'body': body,
+                       'pic_url': pic_url,
+                       'no_photo': no_photo})
+        else:
+            s = get_user_info(item['message']['user_id'])
+            title = s['first_name'] + ' ' + s['last_name']
+            chat_id = s['id']
+            pic_url = s['photo_50']
+            no_photo = True if pic_url == 'http://vk.com/images/camera_50.png' else False
+            re.append({'title': title,
+                       'chat_id': chat_id,
+                       'last_date': last_date,
+                       'body': body,
+                       'pic_url': pic_url,
+                       'no_photo': no_photo})
     return re
 
 
@@ -36,5 +66,3 @@ def last_dialogs(count=30):
         if i is not None:
             re.append(i)
     return re
-
-

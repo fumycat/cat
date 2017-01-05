@@ -1,0 +1,75 @@
+.item {
+  position: relative;
+  font-size: 13px;
+}
+
+.item:hover {
+  background-color: cornflowerblue;
+  cursor: pointer;
+}
+
+body {
+  background: #edeef0;
+}
+
+ul {
+  background: white;
+  margin: auto;
+  position: relative;
+  width: 50%;
+  padding: 10px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: #222;
+}
+
+a:visited {
+  color: #222;
+}
+
+.title {
+  font-size: 16.0px;
+  font-weight: 500;
+}
+
+.time {
+  color: #777e8c;
+  font-size: 12.5px;
+  right: 15px;
+  top: 14px;
+  position: absolute;
+  opacity: 0.7;
+}
+
+.text {
+  font-size: 13px;
+}
+
+.texts {
+    height: 71px;
+    box-sizing: border-box;
+    padding: 10px 0;
+    position: relative;
+    left: 60px;
+    font-weight: 600;
+}
+
+.chat-photo {
+  display: block;
+  padding: 9px 7px 8px 0;
+  position: relative;
+  float: left;
+}
+
+.photo-circle {
+  display: block;
+  overflow: hidden;
+  border-radius: 50%;
+  position: absolute;
+  float: left;
+}

@@ -97,7 +97,7 @@ def wall_repost(object=None, message=None, access_token=os.environ['VK_TOKEN']):
     return result_parser(request.json(), WallRepostException)
 
 
-def messages_get_by_id(message_ids=None, access_token=os.environ['VK_TOKEN']):
+def messages_get_by_id(message_ids, access_token=os.environ['VK_TOKEN']):
     """Returns list of messages"""
     parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], message_ids=message_ids)
     request = requests.get(API + 'messages.getById', params=parameters)
@@ -106,6 +106,29 @@ def messages_get_by_id(message_ids=None, access_token=os.environ['VK_TOKEN']):
         return response['response']['items']
     else:
         raise MessagesGetByIdException
+
+
+def messages_get_chat(chat_ids, fields=None, name_case=None, access_token=os.environ['VK_TOKEN']):
+    """Returns list of objects"""
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], chat_ids=chat_ids,
+                      fields=fields, name_case=name_case)
+    request = requests.get(API + 'messages.getChat', params=parameters)
+    response = request.json()
+    if 'response' in response:
+        return response['response']
+    else:
+        from pprint import pprint
+        pprint(response)
+        raise MessagesGetChatException
+
+
+def get_chat_pic(chat_id, size=50):
+    """Returns picture url"""
+    request = messages_get_chat(chat_id)[0]
+    if 'photo_' + str(size) in request:
+        return request['photo_' + str(size)]
+    else:
+        return 'http://vk.com/images/camera_' + str(size) + '.png'
 
 
 # # TODO

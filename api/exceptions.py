@@ -36,3 +36,7 @@ class WallRepostException(VkException):
 
 class MessagesGetByIdException(VkException):
     pass
+
+
+class MessagesGetChatException(VkException):
+    pass
