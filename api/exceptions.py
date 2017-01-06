@@ -40,3 +40,7 @@ class MessagesGetByIdException(VkException):
 
 class MessagesGetChatException(VkException):
     pass
+
+
+class GroupsGetByIdException(VkException):
+    pass

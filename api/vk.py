@@ -122,13 +122,29 @@ def messages_get_chat(chat_ids, fields=None, name_case=None, access_token=os.env
         raise MessagesGetChatException
 
 
-def get_chat_pic(chat_id, size=50):
+def get_chat_pic(chat_id, size=50, access_token=os.environ['VK_TOKEN']):
     """Returns picture url"""
-    request = messages_get_chat(chat_id)[0]
+    request = messages_get_chat(chat_id, access_token)[0]
     if 'photo_' + str(size) in request:
         return request['photo_' + str(size)]
     else:
         return 'http://vk.com/images/camera_' + str(size) + '.png'
+
+
+def groups_get_by_id(group_id, fields=None, access_token=os.environ['VK_TOKEN']):
+    parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], group_id=group_id, fields=fields)
+    request = requests.get(API + 'groups.getById', params=parameters)
+    response = request.json()
+    if 'response' in response:
+        return response['response']
+    else:
+        from pprint import pprint
+        pprint(response)
+        raise GroupsGetByIdException
+
+
+def groups_get_member():
+    return
 
 
 # # TODO

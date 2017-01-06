@@ -6,19 +6,28 @@
 - Список диалогов
 - История сообщений (с вложениями и пересланными сообщениями)
 
-# Как этим пользоваться
-Прежде всего нужно добавить несколько строк в `.bashrc`:
+# Установка
+1. `git clone https://github.com/fumycat/cat.git`
+2. `nano .bashrc`
 
 ```bash
 export API_VERSION='5.60'
 export VK_TOKEN='ТОКЕН'
 ```
+3. `source ~/.bashrc`
 
-После чего можно запускать:
+# Запуск
+### Console mode (не работает)
+
 
 ```bash
-source ~/.bashrc (первый раз)
-
 python3.6 console.py
 ```
 
+### Browser mode (не работает)
+
+```bash
+python3.6 console.py
+```
+
+И открываем в браузере ссылку, которую выдаст терминал
