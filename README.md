@@ -7,15 +7,14 @@
 - История сообщений (с вложениями и пересланными сообщениями)
 
 # Установка
-1. `git clone https://github.com/fumycat/cat.git`
-2. `nano .bashrc`
 
 ```bash
-export API_VERSION='5.60'
-export VK_TOKEN='ТОКЕН'
+git clone https://github.com/fumycat/cat.git
+echo "export API_VERSION='5.60'" >> ~/.bashrc
+echo "export VK_TOKEN='ТОКЕН'" >> ~/.bashrc
+source ~/.bashrc
+cd cat/
 ```
-3. `source ~/.bashrc`
-
 # Запуск
 ### Console mode (не работает)
 
