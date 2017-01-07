@@ -7,8 +7,9 @@ app = Flask(__name__)
 
 
 @app.route("/<user_id>")
-def messages(user_id):
-    data = reversed(list(history.history_generator(200, user_id, 0)))
+@app.route('/<user_id>/<offset>')
+def messages(user_id, offset=0):
+    data = reversed(list(history.history_generator(200, user_id, int(offset) * 200)))
     return render_template("message_history.html", items=data)
 
 
