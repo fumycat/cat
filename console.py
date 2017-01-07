@@ -27,6 +27,16 @@ def init():
     main()
 
 
+def parse_msg(msg, fwd=1):
+    a = '{A}' if 'attachments' in msg else ''
+    line = f"{msg['message_id']} {msg['date']} {msg['from']['first_name']} {msg['text']} {a}"
+    if 'fwd' in msg:
+        for m in msg['fwd']:
+            space = '--' * fwd
+            line = line + '\n' + space + parse_msg(m, fwd=fwd+1)
+    return line
+
+
 def get_photo(keys, attachment, attachment_type, msg_id):
     best_num = max(int(item.split('_')[1]) for item in keys if item.startswith('photo_'))
     pic_url = attachment[attachment_type]['photo_' + str(best_num)]
@@ -71,8 +81,9 @@ def main():
             finally:
                 if peer < 10000:
                     peer = cache_dialogs[peer]
-                for i in history.history_generator(count=count, peer_id=peer, offset=0):
-                    print(i['message_id'], i['date'], i['from'], i['text'])
+                for i in reversed(list(history.history_generator(count=count, peer_id=peer, offset=0))):
+                    print(parse_msg(i))
+                    # pprint(i)
 
         elif query.startswith('msg'):
             resp = None

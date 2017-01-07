@@ -16,7 +16,7 @@ source ~/.bashrc
 cd cat/
 ```
 # Запуск
-### Console mode (не работает)
+### Console mode
 
 
 ```bash

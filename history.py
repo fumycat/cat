@@ -25,18 +25,21 @@ def parse_message(msg, fwd=False):
     """
     full_time = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%m-%d %H:%M:%S')
     when = arrow.get(int(msg['date'])).humanize(locale='ru')
-    from_user = users.get(msg['user_id'], 'photo_50')
+    if 'from_id' in msg:
+        from_user = users.get(msg['from_id'], 'photo_50')
+    else:
+        from_user = users.get(msg['user_id'], 'photo_50')
     no_photo = True if from_user['photo_50'] == 'http://vk.com/images/camera_50.png' else False
     message_id = '' if fwd else str(msg['id'])
     body = '!ПУСТОЕ СООБЩЕНИЕ!' if msg['body'] == '' else msg['body']
-    if 'attachments' in msg:
-        pass  # TODO
     parsed_message = {'message_id': message_id,
                       'date': when,
                       'full_date': full_time,
                       'from': from_user,
                       'text': body,
                       'no_photo': no_photo}
+    if 'attachments' in msg:
+        parsed_message['attachments'] = 'A'  # TODO
     if 'fwd_messages' in msg:
         parsed_message['fwd'] = []
         for fwd_message in msg['fwd_messages']:
