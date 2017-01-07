@@ -2,11 +2,14 @@ import arrow
 
 import api.vk as vk
 from api.exceptions import *
+from api.vk_cache import Users
+
+users = Users()
 
 
 def get_user_info(user_id):
     try:
-        return vk.users_get(user_id, 'photo_50')
+        return users.get(user_id, 'photo_50')
     except UsersGetException:
         return {'id': user_id, 'first_name': 'Unknown group', 'last_name': ''}
 

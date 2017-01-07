@@ -20,7 +20,9 @@ def parse_message(msg, fwd=False):
     'fwd_messages':
         [
         ...
-        ]
+        ],
+    'no_photo': False,
+    'attachments': [{...}]
     }
     """
     full_time = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%m-%d %H:%M:%S')
@@ -39,7 +41,7 @@ def parse_message(msg, fwd=False):
                       'text': body,
                       'no_photo': no_photo}
     if 'attachments' in msg:
-        parsed_message['attachments'] = 'A'  # TODO
+        parsed_message['attachments'] = msg['attachments']
     if 'fwd_messages' in msg:
         parsed_message['fwd'] = []
         for fwd_message in msg['fwd_messages']:

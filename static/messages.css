@@ -1,4 +1,25 @@
+body {
+  background: #edeef0;
+}
+
+ul {
+  background: white;
+  margin: auto;
+  position: relative;
+  width: 50%;
+  padding: 10px;
+}
 
 .attachment-block {
   
+}
+
+.item {
+  position: relative;
+  font-size: 13px;
+}
+
+.item:hover {
+  background-color: beige;
+  cursor: pointer;
 }
