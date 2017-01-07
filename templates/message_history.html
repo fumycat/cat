@@ -2,30 +2,35 @@
 <html>
  <head>
   <script src="{{ url_for('static', filename='down.js') }}"></script>
+  <script src="{{ url_for('static', filename='tooltip.js') }}"></script>
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <title>Сообщения</title>
-  <link rel="stylesheet" type="text/css" href="/static/messages.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='messages.css') }}"/>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  </head>
  <body>
  <ul>
   {% for i in items %}
-    <div class="item">
+  <div class="item">
+    <div class="over-circle">
       <div class="photo-circle">
-       {% if i.no_photo %}
-        <img class="chat-photo" alt="" src="/static/camera_50.png">
-       {% else %}
-        <img class="chat-photo" alt="" src="{{ i.from.photo_50 }}">
-       {% endif %}
+        {% if i.no_photo %}
+          <img class="chat-photo" alt="" src="/static/camera_50.png">
+        {% else %}
+          <img class="chat-photo" alt="" src="{{ i.from.photo_50 }}">
+        {% endif %}
       </div>
-      
+    </div>
       <div class="texts">
         <div class="main-title">
           <h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1>
-          <h1 class="time">{{ i.date }}</h1>
+          <div class="time" title="{{ i.full_date }}">
+            {{ i.date }}
+          </div>
         </div>
         <h1 class="text">{{ i.text }}</h1>
       </div>
+      
       <div class="attachment-block">
         
       </div>

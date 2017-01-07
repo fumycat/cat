@@ -23,7 +23,7 @@ cd cat/
 python3.6 console.py
 ```
 
-### Browser mode (не работает)
+### Browser mode
 
 ```bash
 python3.6 console.py
