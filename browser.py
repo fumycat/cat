@@ -14,7 +14,7 @@ def messages(user_id):
 
 @app.route("/")
 def dialog_list():
-    data = dialogs.last_dialogs(3)
+    data = dialogs.last_dialogs(30)
     return render_template("dialog_list.html", items=data)
 
 if __name__ == "__main__":

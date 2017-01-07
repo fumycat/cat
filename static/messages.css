@@ -10,8 +10,22 @@ ul {
   padding: 10px;
 }
 
-.attachment-block {
-  
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: #222;
+}
+
+.fwd {
+  position: relative;
+  padding: 20px;
+}
+
+.attachment {
+  position: relative;
+  padding: 20px;
 }
 
 .item {
@@ -71,4 +85,12 @@ ul {
   bottom: 0px;
   position: absolute;
   opacity: 0.7;
+}
+.attach-photo {
+  max-width:600px;
+}
+
+.attach-desc {
+    font-size: 12.0px;
+  font-weight: 500;
 }
