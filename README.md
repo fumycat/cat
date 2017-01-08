@@ -26,7 +26,7 @@ python3.6 console.py
 ### Browser mode
 
 ```bash
-python3.6 console.py
+python3.6 browser.py
 ```
 
 И открываем в браузере ссылку, которую выдаст терминал
