@@ -1,6 +1,6 @@
 from threading import Thread
 
-from post_hook import posts, PostHook
+from other.post_hook import posts, PostHook
 
 
 if_list = ['catcontrolcenter']
