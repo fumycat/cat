@@ -20,18 +20,27 @@
             {% endif %}
         </div>
     </div>
-        <div class="texts">
-            <div class="main-title">
-                <h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1>
-                <div class="time" title="{{ i.full_date }}">
-                    {{ i.date }}
-                </div>
+    <div class="texts">
+        <div class="main-title">
+            <h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1>
+            <div class="time" title="{{ i.full_date }}">
+                {{ i.date }}
             </div>
-            <h1 class="text">{{ i.text }}</h1>
         </div>
+        <h1 class="text">{{ i.text }}</h1>
+    </div>
         <!-- FWD -->
         {%- for a in i.fwd recursive %}
             <div class="fwd">
+               <div class="over-circle">
+                    <div class="photo-circle">
+                        {% if a.no_photo %}
+                    <img class="chat-photo" alt="" src="/static/camera_50.png">
+                        {% else %}
+                    <img class="chat-photo" alt="" src="{{ a.from.photo_50 }}">
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="texts">
                     <div class="main-title">
                         <h1 class="title">{{ a.from.first_name + ' ' + a.from.last_name }}</h1>

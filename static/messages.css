@@ -34,11 +34,6 @@ a:link {
   padding: 5px;
 }
 
-.item:hover {
-  background-color: beige;
-  cursor: pointer;
-}
-
 .chat-photo {
   display: block;
   margin: auto;
