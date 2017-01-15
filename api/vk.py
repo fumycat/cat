@@ -48,7 +48,6 @@ def likes_add(owner_id=None, item_id=0, type='post', access_key=None, access_tok
 
 def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None, access_token=os.environ['VK_TOKEN'],
                   message=None, attachment=None, forward_messages=None, sticker_id=None):
-    """Use try/catch"""
     parameters = dict(access_token=access_token, v=os.environ['API_VERSION'], user_id=user_id,
                       peer_id=peer_id, domain=domain, chat_id=chat_id, message=message, attachment=attachment,
                       forward_messages=forward_messages, sticker_id=sticker_id)
@@ -62,6 +61,7 @@ def messages_send(user_id=None, peer_id=None, domain=None, chat_id=None, access_
 def messages_get_dialogs(count=None, offset=None, start_message_id=None, preview_length=None,
                          unread=None, important=None, unanswered=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: messages_get_dialogs(count=20)"""
+    assert count <= 200, 'count must be <= 200'
     parameters = dict(access_token=access_token, v=os.environ['API_VERSION'],
                       count=count, offset=offset, start_message_id=start_message_id,
                       preview_length=preview_length, unread=unread, important=important, unanswered=unanswered)
@@ -71,6 +71,11 @@ def messages_get_dialogs(count=None, offset=None, start_message_id=None, preview
 
 def messages_get_history(count=None, offset=None, user_id=None, peer_id=None, start_message_id=None, rev=None, access_token=os.environ['VK_TOKEN']):
     """Usage example: messages_get_history(peer_id=1, count=10)"""
+    if isinstance(peer_id, str):
+        assert peer_id.isdigit(), 'peer_id must contains only digits'
+    if isinstance(user_id, str):
+        assert user_id.isdigit(), 'user_id must contains only digits'
+    assert count <= 200, 'count must be <= 200'
     parameters = dict(access_token=access_token, v=os.environ['API_VERSION'],
                       count=count, offset=offset, start_message_id=start_message_id,
                       user_id=user_id, peer_id=peer_id, rev=rev)
