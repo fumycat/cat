@@ -18,20 +18,30 @@ a:link {
   color: #222;
 }
 
+a:visited {
+  color: #222;
+}
+
 .fwd {
   position: relative;
   padding: 20px;
+  border-style: none none none solid;
+  border-left-color: #606060;
 }
 
 .attachment {
   position: relative;
-  padding: 20px;
+  left: 65px;
 }
 
 .item {
   position: relative;
   font-size: 13px;
   padding: 5px;
+}
+
+.item:hover {
+  background-color: #cae0ed;
 }
 
 .chat-photo {
@@ -88,4 +98,10 @@ a:link {
 .attach-desc {
   font-size: 12.0px;
   font-weight: 500;
+}
+
+.audio-main {
+  font-size: 15px;
+  font-weight: 500;
+  position: relative;
 }

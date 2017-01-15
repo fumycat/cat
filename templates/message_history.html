@@ -22,7 +22,7 @@
     </div>
     <div class="texts">
         <div class="main-title">
-            <h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1>
+            <a href="{{ i.user_url }}"><h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1></a>
             <div class="time" title="{{ i.full_date }}">
                 {{ i.date }}
             </div>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="texts">
                     <div class="main-title">
-                        <h1 class="title">{{ a.from.first_name + ' ' + a.from.last_name }}</h1>
+                        <a href="{{ a.user_url }}"><h1 class="title">{{ a.from.first_name + ' ' + a.from.last_name }}</h1><a/>
                         <div class="time" title="{{ i.full_date }}">
                             {{ a.date }}
                         </div>
@@ -56,6 +56,9 @@
                         {% if b.type == "photo" %}
                             <a href="{{ b.user_url }}"><h1 class="attach-desc">{{ b.desc }}</h1></a>
                             <a href="{{ b.url }}"><img class="attach-photo" alt="" src="{{ b.url }}"></a>
+                        {% endif %}
+                        {% if b.type == "audio" %}
+                            <h1 class="audio-main">{{ b.desc }}</h1>
                         {% endif %}
                     </div>
                 {%- endfor %}
@@ -70,6 +73,9 @@
                 {% if a.type == "photo" %}
                     <a href="{{ a.user_url }}"><h1 class="attach-desc">{{ a.desc }}</h1></a>
                     <a href="{{ a.url }}"><img class="attach-photo" alt="" src="{{ a.url }}"></a>
+                {% endif %}
+                {% if a.type == "audio" %}
+                    <h1 class="audio-main">{{ a.desc }}</h1>
                 {% endif %}
             </div>
         {%- endfor %}

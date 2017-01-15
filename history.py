@@ -8,6 +8,14 @@ from api.vk_cache import Users
 users = Users()
 
 
+def parse_audio(attach):
+    duration = int(attach['audio']['duration'])
+    m, s = divmod(duration, 60)
+    desc = f"{attach['audio']['artist']} - {attach['audio']['title']}({m}:{s})"
+    return dict(type='audio',
+                desc=desc)
+
+
 def parse_photo(attach, attach_type, keys):
     best_num = max(int(item.split('_')[1]) for item in keys if item.startswith('photo_'))
     if attach_type == 'photo':
@@ -56,7 +64,8 @@ def parse_message(msg, fwd=False):
                       'full_date': full_time,
                       'from': from_user,
                       'text': body,
-                      'no_photo': no_photo}
+                      'no_photo': no_photo,
+                      'user_url': 'https://vk.com/id' + str(from_user['id'])}
     if 'attachments' in msg:
         attach_data = msg['attachments']
         new_attach_data = []
@@ -73,6 +82,8 @@ def parse_message(msg, fwd=False):
                 for k, v in attach['sticker'].items():
                     keys.append(k)
                 new_attach_data.append(parse_photo(attach, 'sticker', keys))
+            elif attach['type'] == 'audio':
+                new_attach_data.append(parse_audio(attach))
             # TODO
 
         parsed_message['attachments'] = new_attach_data
