@@ -50,7 +50,7 @@ def parse_message(msg, fwd=False):
     'attachments': [{...}]
     }
     """
-    full_time = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%m-%d %H:%M:%S')
+    full_time = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%y-%m-%d %H:%M:%S')
     when = arrow.get(int(msg['date'])).humanize(locale='ru')
     if 'from_id' in msg:
         from_user = users.get(msg['from_id'], 'photo_50')
