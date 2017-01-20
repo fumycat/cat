@@ -1,87 +1,101 @@
 <!DOCTYPE HTML>
 <html>
- <head>
-  <script src="{{ url_for('static', filename='down.js') }}"></script>
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  <title>Сообщения</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='messages.css') }}"/>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- </head>
- <body>
-<ul>
-{% for i in items %}
-<div class="item">
-    <div class="over-circle">
-        <div class="photo-circle">
-            {% if i.no_photo %}
-                <img class="chat-photo" alt="" src="/static/camera_50.png">
-            {% else %}
-                <img class="chat-photo" alt="" src="{{ i.from.photo_50 }}">
-            {% endif %}
-        </div>
-    </div>
-    <div class="texts">
-        <div class="main-title">
-            <a href="{{ i.user_url }}"><h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1></a>
-            <div class="time" title="{{ i.full_date }}">
-                {{ i.date }}
-            </div>
-        </div>
-        <h1 class="text">{{ i.text }}</h1>
-    </div>
-        <!-- FWD -->
-        {%- for a in i.fwd recursive %}
-            <div class="fwd">
-               <div class="over-circle">
+<head>
+    <link rel="stylesheet" type="text/css" href="/home/fumycat/PycharmProjects/cat/static/messages.css"/>
+    <link rel="stylesheet" type="text/css" href="/home/fumycat/PycharmProjects/cat/static/messages.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="{{ url_for('static', filename='down.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/d25e9c5564.js"></script>
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Сообщения</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='messages.css') }}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+    <ul>
+        {% for i in items %}
+            <div class="item">
+                <div class="over-circle">
                     <div class="photo-circle">
-                        {% if a.no_photo %}
-                    <img class="chat-photo" alt="" src="/static/camera_50.png">
+                        {% if i.no_photo %}
+                            <img class="chat-photo" alt="" src="/static/camera_50.png">
                         {% else %}
-                    <img class="chat-photo" alt="" src="{{ a.from.photo_50 }}">
+                            <img class="chat-photo" alt="" src="{{ i.from.photo_50 }}">
                         {% endif %}
                     </div>
                 </div>
                 <div class="texts">
                     <div class="main-title">
-                        <a href="{{ a.user_url }}"><h1 class="title">{{ a.from.first_name + ' ' + a.from.last_name }}</h1><a/>
-                        <div class="time" title="{{ a.full_date }}">
-                            {{ a.date }}
+                        <a href="{{ i.user_url }}"><h1 class="title">{{ i.from.first_name + ' ' + i.from.last_name }}</h1></a>
+                        <div class="time" title="{{ i.full_date }}">
+                            {{ i.date }}
                         </div>
                     </div>
-                    <h1 class="text">{{ a.text }}</h1>
+                    <h1 class="text">{{ i.text }}</h1>
                 </div>
-                <!-- ATTACHMENTS -->
-                {%- for b in a.attachments %}
-                    <div class="attachment">
-                        {% if b.type == "photo" %}
-                            <a href="{{ b.user_url }}"><h1 class="attach-desc">{{ b.desc }}</h1></a>
-                            <a href="{{ b.url }}"><img class="attach-photo" alt="" src="{{ b.url }}"></a>
-                        {% endif %}
-                        {% if b.type == "audio" %}
-                            <h1 class="audio-main">{{ b.desc }}</h1>
-                        {% endif %}
-                    </div>
-                {%- endfor %}
-                {%- if a.fwd %}
-                    <div>{{ loop(a.fwd)}}</div>
-                {%- endif %}
-            </div>
-        {%- endfor %}
-        <!-- ATTACHMENTS -->
-        {%- for a in i.attachments %}
-            <div class="attachment">
-                {% if a.type == "photo" %}
-                    <a href="{{ a.user_url }}"><h1 class="attach-desc">{{ a.desc }}</h1></a>
-                    <a href="{{ a.url }}"><img class="attach-photo" alt="" src="{{ a.url }}"></a>
-                {% endif %}
-                {% if a.type == "audio" %}
-                    <h1 class="audio-main">{{ a.desc }}</h1>
-                {% endif %}
-            </div>
-        {%- endfor %}
+                    <!-- FWD -->
+                    {%- for a in i.fwd recursive %}
+                        <div class="fwd">
+                            <div class="over-circle">
+                                <div class="photo-circle">
+                                    {% if a.no_photo %}
+                                <img class="chat-photo" alt="" src="/static/camera_50.png">
+                                    {% else %}
+                                <img class="chat-photo" alt="" src="{{ a.from.photo_50 }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="texts">
+                                <div class="main-title">
+                                    <a href="{{ a.user_url }}"><h1 class="title">{{ a.from.first_name + ' ' + a.from.last_name }}</h1></a>
+                                    <div class="time" title="{{ a.full_date }}">
+                                        {{ a.date }}
+                                    </div>
+                                </div>
+                                <h1 class="text">{{ a.text }}</h1>
+                            </div>
+                            <!-- ATTACHMENTS -->
+                            {%- for b in a.attachments %}
+                                <div class="attachment">
+                                    {% if b.type == "photo" %}
+                                        <a href="{{ b.user_url }}"><h1 class="attach-desc">{{ b.desc }}</h1></a>
+                                        <a href="{{ b.url }}"><img class="attach-photo" alt="" src="{{ b.url }}"></a>
+                                    {% endif %}
+                                    {% if b.type == "audio" %}
+                                        <h1 class="audio-main"> <i class="fa fa-play"></i> {{ b.desc }}</h1>
+                                    {% endif %}
+                                    {% if b.type == "wall" %}
+                                        <a href="{{ b.link }}"><h1 class="text">{{ b.link }}</h1></a>
+                                    {% endif %}
+                                </div>
+                            {%- endfor %}
+                            {%- if a.fwd %}
+                                <div>{{ loop(a.fwd)}}</div>
+                            {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    <!-- ATTACHMENTS -->
+                    {%- for a in i.attachments %}
+                        <div class="attachment">
+                            {% if a.type == "photo" %}
+                                <a href="{{ a.user_url }}"><h1 class="attach-desc">{{ a.desc }}</h1></a>
+                                <a href="{{ a.url }}"><img class="attach-photo" alt="" src="{{ a.url }}"></a>
+                            {% endif %}
+                            {% if a.type == "audio" %}
+                                <h1 class="audio-main"> <i class="fa fa-play"></i> {{ a.desc }}</h1>
+                            {% endif %}
+                            {% if a.type == "wall" %}
+                                <a href="{{ a.link }}"><h1 class="text">{{ a.link }}</h1></a>
+                            {% endif %}
+                        </div>
+                    {%- endfor %}
 
-</div>
-{% endfor %}
-</ul>
+            </div>
+        {% endfor %}
+    </ul>
 </body>
 </html>

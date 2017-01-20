@@ -32,6 +32,28 @@ def parse_photo(attach, attach_type, keys):
                 user_url=user_url)
 
 
+def parse_wall(attach):
+    return dict(type='wall',
+                link='https://vk.com/wall' + str(attach['wall']['from_id']) + '_' + str(attach['wall']['id']))
+
+
+def parse_attach(attach):
+    if attach['type'] == 'photo':
+        keys = []
+        for k, v in attach['photo'].items():
+            keys.append(k)
+        return parse_photo(attach, 'photo', keys)
+    elif attach['type'] == 'sticker':
+        keys = []
+        for k, v in attach['sticker'].items():
+            keys.append(k)
+        return parse_photo(attach, 'sticker', keys)
+    elif attach['type'] == 'audio':
+        return parse_audio(attach)
+    elif attach['type'] == 'wall':
+        return parse_wall(attach)
+
+
 def parse_message(msg, fwd=False):
     """
     Returns list of message objects
@@ -70,21 +92,7 @@ def parse_message(msg, fwd=False):
         attach_data = msg['attachments']
         new_attach_data = []
         for attach in attach_data:
-            # Photos
-            if attach['type'] == 'photo':
-                keys = []
-                for k, v in attach['photo'].items():
-                    keys.append(k)
-                new_attach_data.append(parse_photo(attach, 'photo', keys))
-            # Stickers
-            elif attach['type'] == 'sticker':
-                keys = []
-                for k, v in attach['sticker'].items():
-                    keys.append(k)
-                new_attach_data.append(parse_photo(attach, 'sticker', keys))
-            elif attach['type'] == 'audio':
-                new_attach_data.append(parse_audio(attach))
-            # TODO
+            new_attach_data.append(parse_attach(attach))
 
         parsed_message['attachments'] = new_attach_data
     if 'fwd_messages' in msg:
@@ -96,4 +104,4 @@ def parse_message(msg, fwd=False):
 
 def history_generator(count=20, peer_id=1, offset=0):
     for message in vk.messages_get_history(count=count, peer_id=peer_id, offset=offset)['items']:
-        yield parse_message(message)  # yield ?
+        yield parse_message(message)

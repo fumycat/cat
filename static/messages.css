@@ -65,11 +65,13 @@ a:visited {
   font-size: 14.0px;
   font-weight: 500;
   position: relative;
+  font-family: 'Roboto', sans-serif;
 }
 
 .title {
   font-size: 16.0px;
   font-weight: 500;
+  font-family: 'Roboto', sans-serif;
 }
 
 .texts {
@@ -84,6 +86,7 @@ a:visited {
 }
 
 .time {
+  font-family: 'Roboto', sans-serif;
   color: #777e8c;
   font-size: 12.5px;
   right: 15px;
