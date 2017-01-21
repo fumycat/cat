@@ -61,7 +61,7 @@ def parse_message(msg, fwd=False):
     {
     'message_id': '23',
     'date': 'an hour ago',
-    'full_date': '12-25 11:23:00',
+    'full_date': '17-01-21 19:26:00',
     'from': {'first_name': 'Pavel', ...},
     'text': 'Hello',
     'fwd_messages':

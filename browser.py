@@ -14,9 +14,25 @@ def messages(user_id, offset=0):
 
 
 @app.route("/")
-def dialog_list():
+@app.route("/dialogs/<int:offset>")
+def dialog_list(offset=0):
     data = dialogs.last_dialogs(40)
     return render_template("dialog_list.html", items=data)
+
+
+@app.route("/local")
+@app.route("/local/dialogs/<int:offset>")
+def local_dialog_list(offset=0):
+    data = 0
+    return render_template("dialog_list.html", items=data)
+
+
+@app.route("/local/<int:user_id>")
+@app.route("/local/<int:user_id>/<int:offset>")
+def messages(user_id, offset=0):
+    data = 0
+    return render_template("message_history.html", items=data)
+
 
 if __name__ == "__main__":
     app.run()

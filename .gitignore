@@ -90,7 +90,5 @@ ENV/
 .idea/
 other/output/
 other/output_m/
-g_dialogs.py
-g_history.py
-database.db
 .cache/
+out/

@@ -14,9 +14,11 @@ def get_user_info(user_id):
         return {'id': user_id, 'first_name': 'Unknown group', 'last_name': ''}
 
 
-def dialogs(count, offset):
+def dialogs(count, offset, parse):
     re = []
     response = vk.messages_get_dialogs(count, offset)
+    if parse == False:
+        return response['items']
     #
     # from pprint import pprint
     # pprint(response)
@@ -25,7 +27,7 @@ def dialogs(count, offset):
         last_date = arrow.get(int(item['message']['date'])).humanize(locale='ru_ru')
         body = item['message']['body']
         if body == '':
-            body = 'Костыль'
+            body = 'No text here'
         if 'chat_id' in item['message']:
             title = item['message']['title']
             chat_id = str(int(item['message']['chat_id']) + 2000000000)
@@ -52,19 +54,21 @@ def dialogs(count, offset):
     return re
 
 
-def last_dialogs(count=30):
+def last_dialogs(count=30, parse=True):
     re = []
     x = count // 200
     y = count % 200
     i = 0
     while x > 0:
-        res = dialogs(x, x * i)
-        for i in res:
-            if i is not None:
-                re.append(i)
+        res = dialogs(200, x * i, parse)
+        for m in res:
+            if m is not None:
+                re.append(m)
+            if not m:
+                break
         x -= 1
         i += 1
-    res = dialogs(y, x * i)
+    res = dialogs(y, 200 * i, parse)
     for i in res:
         if i is not None:
             re.append(i)
