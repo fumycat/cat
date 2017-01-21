@@ -23,16 +23,9 @@ def msg(user_id):
     if not os.path.exists(output_directory + '/counts.json'):
         print('First run...')
         data = {}
-        # with open(output_directory + '/dialogs.json', 'r') as d:
-        #     dialogs_list = json.load(d)
-        # for i in dialogs_list:
-        #     if 'chat_id' in i['message']:
-        #         peer_id = int(i['message']['chat_id']) + 2000000000
-        #     else:
-        #         peer_id = int(i['message']['user_id'])
-        #     data[peer_id] = vk.messages_get_history(count=0, peer_id=peer_id)['count']
         with open(output_directory + '/counts.json', 'w') as f:
             json.dump(data, f)
+
     # Main
     if not os.path.exists(output_directory + '/messages'):
         os.makedirs(output_directory + '/messages')
@@ -71,13 +64,13 @@ def msg(user_id):
                         current_user_messages.append(k)
             else:
                 print('Nothing to do')
+                print('----------')
                 return
             print('Completed. Updating ' + str(user_id) + '.json file')
             with open(output_directory + '/messages/' + str(user_id) + '.json', 'r') as f:
                 what_i_have = json.load(f)
             current_user_messages = current_user_messages + what_i_have
             # [5, 4, 3] + [2, 1] = [5, 4, 3, 2, 1]
-
 
     i = 0
     while already is None:
@@ -108,5 +101,19 @@ def msg(user_id):
     with open(output_directory + '/counts.json', 'w') as d:
         json.dump(data, d)
     print('Completed')
+    print('----------')
 
-msg(2000000162)
+
+def save_all_messages():
+    with open(output_directory + '/dialogs.json') as f:
+        dialog_list = json.load(f)
+    for i in dialog_list:
+        if 'chat_id' in i['message']:
+            msg(int(i['message']['chat_id']) + 2000000000)
+        else:
+            msg(int(i['message']['user_id']))
+
+if __name__ == '__main__':
+    if not os.path.exists(output_directory + '/dialogs.json'):
+        get_dialogs()
+    save_all_messages()
