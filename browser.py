@@ -29,7 +29,7 @@ def local_dialog_list(offset=0):
 
 @app.route("/local/<int:user_id>")
 @app.route("/local/<int:user_id>/<int:offset>")
-def messages(user_id, offset=0):
+def local_messages(user_id, offset=0):
     data = 0
     return render_template("message_history.html", items=data)
 

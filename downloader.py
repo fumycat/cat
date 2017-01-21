@@ -20,7 +20,7 @@ def get_dialogs():
 
 
 def msg(user_id):
-    if os.path.exists(output_directory + 'counts.json'):
+    if not os.path.exists(output_directory + '/counts.json'):
         print('First run...')
         data = {}
         # with open(output_directory + '/dialogs.json', 'r') as d:
@@ -42,13 +42,17 @@ def msg(user_id):
     if os.path.exists(output_directory + '/messages/' + str(user_id) + '.json'):
         with open(output_directory + '/counts.json', 'r') as d:
             data = json.load(d)
-        data.get(user_id)
-        if data is None:
+            last_count = data.get(str(user_id))
+        if last_count is None:
             pass  # No info about count
         else:
-            already = data - vk.messages_get_history(count=0, peer_id=user_id)['count']
-            print(str(already) + ' new messages from ' + str(user_id))
+            current_count = vk.messages_get_history(count=0, peer_id=user_id)['count']
+            print(str(current_count) + ' - current count')
+            print(str(last_count) + ' - last count')
+            already = current_count - last_count
+            print(str(already) + ' new messages from peer ' + str(user_id))
             if already > 0:
+                print('Downloading new messages...')
                 x = already // 200
                 y = already % 200
                 j = 0
@@ -65,6 +69,10 @@ def msg(user_id):
                 for k in res:
                     if k is not None:
                         current_user_messages.append(k)
+            else:
+                print('Nothing to do')
+                return
+            print('Completed. Updating ' + str(user_id) + '.json file')
             with open(output_directory + '/messages/' + str(user_id) + '.json', 'r') as f:
                 what_i_have = json.load(f)
             current_user_messages = current_user_messages + what_i_have
@@ -85,13 +93,20 @@ def msg(user_id):
             break
         for item in response['items']:
             current_user_messages.append(item)
-        print(str(i) + '/' + str(response['count'] / 200) + ' messages (vk.com/id' + str(user_id) + ')')
+        print('Downloading... ' + str(i / 200) + '/' + str(round(response['count'] / 200)) + ' (vk.com/id' + str(user_id) + ')')
         i += 200
+    if already is None:
+        print('Completed')
     with open(output_directory + '/messages/' + str(user_id) + '.json', 'w') as f:
         json.dump(current_user_messages, f)
+    print('File ' + str(user_id) + '.json has been successfully saved')
     # Counts
+    print('Updating counts.json')
     with open(output_directory + '/counts.json', 'r') as d:
         data = json.load(d)
-    data[user_id] = vk.messages_get_history(count=0, peer_id=user_id)['count']
+    data[str(user_id)] = vk.messages_get_history(count=0, peer_id=user_id)['count']
     with open(output_directory + '/counts.json', 'w') as d:
         json.dump(data, d)
+    print('Completed')
+
+msg(2000000162)
