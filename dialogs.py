@@ -1,4 +1,5 @@
 import arrow
+import json
 
 import api.vk as vk
 from api.exceptions import *
@@ -14,16 +15,24 @@ def get_user_info(user_id):
         return {'id': user_id, 'first_name': 'Unknown group', 'last_name': ''}
 
 
-def dialogs(count, offset, parse):
+def dialogs(count, offset, parse, local=False):
     re = []
-    response = vk.messages_get_dialogs(count, offset)
+    response = []
+    if not local:
+        response = vk.messages_get_dialogs(count, offset)['items']
+    else:
+        with open('out_m_corrupt/dialogs.json') as d:
+            response = json.load(d)
+
     if parse == False:
         return response['items']
     #
     # from pprint import pprint
     # pprint(response)
     #
-    for item in response['items']:
+    j = 0
+    for item in response:
+        print('Getting info ' + str(item['message']['user_id']))
         last_date = arrow.get(int(item['message']['date'])).humanize(locale='ru_ru')
         body = item['message']['body']
         if body == '':
@@ -31,7 +40,10 @@ def dialogs(count, offset, parse):
         if 'chat_id' in item['message']:
             title = item['message']['title']
             chat_id = str(int(item['message']['chat_id']) + 2000000000)
-            pic_url = vk.get_chat_pic(int(chat_id) - 2000000000, 50)
+            if local:
+                pic_url = 'http://vk.com/images/camera_50.png'
+            else:
+                pic_url = vk.get_chat_pic(int(chat_id) - 2000000000, 50)
             no_photo = True if pic_url == 'http://vk.com/images/camera_50.png' else False
             re.append({'title': title,
                        'chat_id': chat_id,
@@ -42,8 +54,11 @@ def dialogs(count, offset, parse):
         else:
             s = get_user_info(item['message']['user_id'])
             title = s['first_name'] + ' ' + s['last_name']
-            chat_id = s['id']
-            pic_url = s['photo_50']
+            chat_id = item['message']['user_id']  # s['id']
+            try:
+                pic_url = s['photo_50']
+            except:
+                pic_url = ''
             no_photo = True if pic_url == 'http://vk.com/images/camera_50.png' else False
             re.append({'title': title,
                        'chat_id': chat_id,
@@ -51,6 +66,11 @@ def dialogs(count, offset, parse):
                        'body': body,
                        'pic_url': pic_url,
                        'no_photo': no_photo})
+        if local:
+            re[-1]['chat_id'] = 'local/' + str(re[-1]['chat_id'])
+        j += 1
+        if j > count:
+            break
     return re
 
 
@@ -69,7 +89,12 @@ def last_dialogs(count=30, parse=True):
         x -= 1
         i += 1
     res = dialogs(y, 200 * i, parse)
-    for i in res:
-        if i is not None:
-            re.append(i)
+    for j in res:
+        if j is not None:
+            re.append(j)
     return re
+
+
+def local_dialogs(count=30):
+    return dialogs(count, 0, True, True)
+

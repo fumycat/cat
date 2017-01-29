@@ -1,3 +1,5 @@
+import os
+import json
 import arrow
 import datetime
 from pprint import pprint
@@ -18,14 +20,18 @@ def parse_audio(attach):
 
 def parse_photo(attach, attach_type, keys):
     best_num = max(int(item.split('_')[1]) for item in keys if item.startswith('photo_'))
+    desc = ''
+    user_url = ''
     if attach_type == 'photo':
-        user = users.get(attach[attach_type]['owner_id'])
-        text = attach[attach_type]['text']
-        desc = text + ' (' + user['first_name'] + ' ' + user['last_name'] + ')'
-        user_url = 'https://vk.com/id' + str(user['id'])
-    else:
-        desc = ''
-        user_url = ''
+        user = 'This photo mb deleted'
+        try:
+            user = users.get(attach[attach_type]['owner_id'])
+            text = attach[attach_type]['text']
+            desc = text + ' (' + user['first_name'] + ' ' + user['last_name'] + ')'
+            user_url = 'https://vk.com/id' + str(user['id'])
+        except:
+            print('Exception in parse_photo function')
+            pprint(attach)
     return dict(url=attach[attach_type]['photo_' + str(best_num)],
                 type='photo',
                 desc=desc,
@@ -74,10 +80,13 @@ def parse_message(msg, fwd=False):
     """
     full_time = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%y-%m-%d %H:%M:%S')
     when = arrow.get(int(msg['date'])).humanize(locale='ru')
-    if 'from_id' in msg:
-        from_user = users.get(msg['from_id'], 'photo_50')
-    else:
-        from_user = users.get(msg['user_id'], 'photo_50')
+    try:
+        if 'from_id' in msg:
+            from_user = users.get(msg['from_id'], 'photo_50')
+        else:
+            from_user = users.get(msg['user_id'], 'photo_50')
+    except:
+        from_user = users.get(333, 'photo_50')
     no_photo = True if from_user['photo_50'] == 'http://vk.com/images/camera_50.png' else False
     message_id = '' if fwd else str(msg['id'])
     body = 'No text here. Msg id: ' + str(message_id) if msg['body'] == '' else msg['body']
@@ -102,6 +111,17 @@ def parse_message(msg, fwd=False):
     return parsed_message
 
 
-def history_generator(count=20, peer_id=1, offset=0):
-    for message in vk.messages_get_history(count=count, peer_id=peer_id, offset=offset)['items']:
-        yield parse_message(message)
+def history_generator(count=20, peer_id=1, offset=0, local=False):
+    if not local:
+        for message in vk.messages_get_history(count=count, peer_id=peer_id, offset=offset)['items']:
+            yield parse_message(message)
+    else:
+        for f in os.listdir('out_m_corrupt/messages'):
+            if str(f) == str(peer_id) + '.json':
+                with open('out_m_corrupt/messages/' + f) as r:
+                    msgs = json.load(r)
+                    for sms in msgs:
+                        if isinstance(sms, str):
+                            continue
+                        yield parse_message(sms)
+

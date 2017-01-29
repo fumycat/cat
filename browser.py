@@ -23,14 +23,14 @@ def dialog_list(offset=0):
 @app.route("/local")
 @app.route("/local/dialogs/<int:offset>")
 def local_dialog_list(offset=0):
-    data = 0
+    data = dialogs.local_dialogs()
     return render_template("dialog_list.html", items=data)
 
 
 @app.route("/local/<int:user_id>")
 @app.route("/local/<int:user_id>/<int:offset>")
 def local_messages(user_id, offset=0):
-    data = 0
+    data = reversed(list(history.history_generator(200, user_id, offset * 200, True)))
     return render_template("message_history.html", items=data)
 
 

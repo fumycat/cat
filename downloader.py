@@ -43,6 +43,8 @@ def msg(user_id):
             print(str(current_count) + ' - current count')
             print(str(last_count) + ' - last count')
             already = current_count - last_count
+            if last_count == 0:
+                already = current_count
             print(str(already) + ' new messages from peer ' + str(user_id))
             if already > 0:
                 print('Downloading new messages...')

@@ -90,5 +90,6 @@ ENV/
 .idea/
 other/output/
 other/output_m/
+out_m_corrupt/
 .cache/
 out/
