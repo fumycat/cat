@@ -116,12 +116,12 @@ def history_generator(count=20, peer_id=1, offset=0, local=False):
         for message in vk.messages_get_history(count=count, peer_id=peer_id, offset=offset)['items']:
             yield parse_message(message)
     else:
-        for f in os.listdir('out_m_corrupt/messages'):
-            if str(f) == str(peer_id) + '.json':
-                with open('out_m_corrupt/messages/' + f) as r:
-                    msgs = json.load(r)
-                    for sms in msgs:
-                        if isinstance(sms, str):
-                            continue
-                        yield parse_message(sms)
-
+        try:
+            with open('out_m_corrupt/messages/' + str(peer_id) + '.json') as r:
+                msgs = json.load(r)
+                for sms in msgs:
+                    if isinstance(sms, str):
+                        continue
+                    yield parse_message(sms)
+        except FileNotFoundError:
+            pass
