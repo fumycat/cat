@@ -30,7 +30,7 @@ def local_dialog_list(offset=0):
 @app.route("/local/<int:user_id>")
 @app.route("/local/<int:user_id>/<int:offset>")
 def local_messages(user_id, offset=0):
-    data = reversed(list(history.history_generator(200, user_id, offset * 200, True)))
+    data = reversed(list(history.history_generator(200, user_id, offset * 200, local=True)))
     return render_template("message_history.html", items=data)
 
 
