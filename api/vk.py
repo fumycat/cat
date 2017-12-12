@@ -1,13 +1,22 @@
 import os
 import requests
-from api.apihelper import check_fields
-from api.apihelper import result_parser
 from api.exceptions import *
 
 API = 'https://api.vk.com/method/'
 
 
-# @check_fields('users_get')
+def result_parser(response, exception):
+    if 'error' in response:
+        raise exception(str(response))  # TODO
+    elif 'response' in response:
+        if len(response['response']) == 1:
+            return response['response'][0]
+        elif len(response['response']) > 1:
+            return response['response']
+        else:
+            raise exception(str(response))  # TODO
+
+
 def users_get(user_ids=1, fields=None, name_case='nom', access_token=os.environ['VK_TOKEN']):
     """Usage example: users_get(1, ['online', 'timezone'])"""
     if isinstance(user_ids, list):

@@ -78,7 +78,12 @@ def parse_message(msg, fwd=False):
     'attachments': [{...}]
     }
     """
-    full_time = datetime.datetime.fromtimestamp(int(msg['date'])).strftime('%y-%m-%d %H:%M:%S')
+    try:
+        full_time = datetime.datetime.fromtimestamp(int(msg['date']))
+        full_time = full_time.strftime('%y-%m-%d %H:%M:%S')
+    except:
+        print(msg['date'])
+        full_time = 'unknown 1'
     when = arrow.get(int(msg['date'])).humanize(locale='ru')
     try:
         if 'from_id' in msg:
@@ -117,9 +122,10 @@ def history_generator(count=20, peer_id=1, offset=0, local=False):
             yield parse_message(message)
     else:
         try:
-            with open('out_m_corrupt/messages/' + str(peer_id) + '.json') as r:
+            with open('out/messages/' + str(peer_id) + '.json') as r:
                 msgs = json.load(r)
-                for sms in msgs:
+                print('Messages in this chat:', len(msgs))
+                for sms in msgs[0+offset:201+offset]:
                     if isinstance(sms, str):
                         continue
                     yield parse_message(sms)

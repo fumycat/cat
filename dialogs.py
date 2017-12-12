@@ -21,7 +21,7 @@ def dialogs(count, offset, parse, local=False):
     if not local:
         response = vk.messages_get_dialogs(count, offset)['items']
     else:
-        with open('out_m_corrupt/dialogs.json') as d:
+        with open('out/dialogs.json') as d:
             response = json.load(d)
 
     if parse == False:
