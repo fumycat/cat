@@ -4,7 +4,7 @@ import os
 import api.vk as vk
 from time import sleep
 
-output_directory = 'out'
+output_directory = 'out_1'
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
     print('Creating ' + output_directory + ' directory')
@@ -88,7 +88,8 @@ def msg(user_id):
             break
         for item in response['items']:
             current_user_messages.append(item)
-        print('Downloading... ' + str(i / 200) + '/' + str(round(response['count'] / 200)) + ' (vk.com/id' + str(user_id) + ')')
+        print('Downloading... ' + str(i / 200) + '/' + str(round(response['count'] / 200)) + ' (vk.com/id' + str(
+            user_id) + ')')
         i += 200
     if already is None:
         print('Completed')
@@ -114,6 +115,7 @@ def save_all_messages():
             msg(int(i['message']['chat_id']) + 2000000000)
         else:
             msg(int(i['message']['user_id']))
+
 
 if __name__ == '__main__':
     if not os.path.exists(output_directory + '/dialogs.json'):

@@ -25,7 +25,7 @@ def dialogs(count, offset, parse, local=False):
             response = json.load(d)
 
     if parse == False:
-        return response['items']
+        return response
     #
     # from pprint import pprint
     # pprint(response)
