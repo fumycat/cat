@@ -122,7 +122,7 @@ def history_generator(count=20, peer_id=1, offset=0, local=False):
             yield parse_message(message)
     else:
         try:
-            with open('out/messages/' + str(peer_id) + '.json') as r:
+            with open(os.environ['OUT_DIR'] + '/messages/' + str(peer_id) + '.json') as r:
                 msgs = json.load(r)
                 print('Messages in this chat:', len(msgs))
                 for sms in msgs[0+offset:201+offset]:

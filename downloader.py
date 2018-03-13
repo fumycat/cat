@@ -4,7 +4,7 @@ import os
 import api.vk as vk
 from time import sleep
 
-output_directory = 'out_1'
+output_directory = os.environ['OUT_DIR']
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
     print('Creating ' + output_directory + ' directory')
